@@ -200,72 +200,71 @@
 <ul>
 <li><em>next</em> - executes next step.</li>
 </ul>
-<p><code>json
-  {
-    "id": "hello",
-    "displayName": "Say Hello",
-    "type": "actions",
-    "text": "Hi {{$firstName}}, how can I help?",
-    "actions": [
-      { "title": "Book Appointment", "action": "next" }
-    ]
-  }</code></p>
-<p>​</p>
+<pre><code class="json">{
+&quot;id&quot;: &quot;hello&quot;,
+&quot;displayName&quot;: &quot;Say Hello&quot;,
+&quot;type&quot;: &quot;actions&quot;,
+&quot;text&quot;: &quot;Hi {{$firstName}}, how can I help?&quot;,
+&quot;actions&quot;: [
+    { &quot;title&quot;: &quot;Book Appointment&quot;, &quot;action&quot;: &quot;next&quot; }
+  ]
+}
+</code></pre>
+
 <ul>
 <li><em>step</em> - executes specific step in a flow. Step and flow are specified via <em>options</em> <em>parameter</em></li>
 </ul>
-<p>```json
-  {
-    "flows": [{
-        "id": "main",
-      "steps": [{
-        "id": "hello",
-        "displayName": "Say Hello",
-        "type": "actions",
-        "text": "Hi {{$firstName}}, how can I help?",
-        "actions": [{ 
-            "title": "Book Appointment",
-            "action": "step",
-            "options": {"step": "book", "flow": "main"}
+<pre><code class="json">{
+  &quot;flows&quot;: [{
+    &quot;id&quot;: &quot;main&quot;,
+    &quot;steps&quot;: [{
+        &quot;id&quot;: &quot;hello&quot;,
+        &quot;displayName&quot;: &quot;Say Hello&quot;,
+        &quot;type&quot;: &quot;actions&quot;,
+        &quot;text&quot;: &quot;Hi {{$firstName}}, how can I help?&quot;,
+        &quot;actions&quot;: [{ 
+            &quot;title&quot;: &quot;Book Appointment&quot;,
+            &quot;action&quot;: &quot;step&quot;,
+            &quot;options&quot;: {&quot;step&quot;: &quot;book&quot;, &quot;flow&quot;: &quot;main&quot;}
         }]
-      },
-      ...
-      {
-          "id": "book"
+    },
+    ...
+    {
+        &quot;id&quot;: &quot;book&quot;
         ...
     }]
-    }]
-  }</p>
-<p>```</p>
-<p>​</p>
+  }]
+}
+</code></pre>
+
 <ul>
 <li><em>flow</em> - runs specific flow. After flow finishes to execute the current flow continues.</li>
 </ul>
-<p><code>json
-  {
-    "flows": [{
-        "id": "main",
-      "steps": [{
-        "id": "hello",
-        "displayName": "Say Hello",
-        "type": "actions",
-        "text": "Hi {{$firstName}}, how can I help?",
-        "actions": [{ 
-            "title": "Book Appointment",
-            "action": "flow",
-            "options": {"flow": "clientDetails"}
-        }]
+<pre><code class="json">{
+  &quot;flows&quot;: [{
+    &quot;id&quot;: &quot;main&quot;,
+    &quot;steps&quot;: [{
+      &quot;id&quot;: &quot;hello&quot;,
+      &quot;displayName&quot;: &quot;Say Hello&quot;,
+      &quot;type&quot;: &quot;actions&quot;,
+      &quot;text&quot;: &quot;Hi {{$firstName}}, how can I help?&quot;,
+      &quot;actions&quot;: [{ 
+        &quot;title&quot;: &quot;Book Appointment&quot;,
+        &quot;action&quot;: &quot;flow&quot;,
+        &quot;options&quot;: {&quot;flow&quot;: &quot;clientDetails&quot;}
       }]
-    }, {
-      "id": "clientDetails",
-      "steps": [{
-        "id": "phone",
-        "type": "input"
-        ...
-    }] 
     }]
-  }</code></p>
-<p>​</p>
+  }, {
+    &quot;id&quot;: &quot;clientDetails&quot;,
+    &quot;steps&quot;: [{
+      &quot;id&quot;: &quot;phone&quot;,
+      &quot;type&quot;: &quot;input&quot;
+      ...
+    }]
+  }]
+}
+</code></pre>
+
 <h3 id="cards-step">Cards Step</h3>
 <p>Displays image content cards to users. Requies <em>cards</em> step property to define card. Card definition includes the following properties:</p>
 <ul>
@@ -374,5 +373,5 @@
 
 <!--
 MkDocs version : 0.15.3
-Build Date UTC : 2016-07-30 16:08:49.776000
+Build Date UTC : 2016-07-30 16:17:31.480000
 -->

@@ -130,78 +130,75 @@ You can define the following action descriptions for your buttons:
 
 - *next* - executes next step.
 
-  ```json
-  {
-    "id": "hello",
-    "displayName": "Say Hello",
-    "type": "actions",
-    "text": "Hi {{$firstName}}, how can I help?",
-    "actions": [
-      { "title": "Book Appointment", "action": "next" }
-    ]
-  }
-  ```
-
-  ​
+```json
+{
+"id": "hello",
+"displayName": "Say Hello",
+"type": "actions",
+"text": "Hi {{$firstName}}, how can I help?",
+"actions": [
+	{ "title": "Book Appointment", "action": "next" }
+  ]
+}
+```
 
 - *step* - executes specific step in a flow. Step and flow are specified via *options* *parameter*
 
-  ```json
-  {
-    "flows": [{
-    	"id": "main",
-      "steps": [{
-        "id": "hello",
-        "displayName": "Say Hello",
-        "type": "actions",
-        "text": "Hi {{$firstName}}, how can I help?",
-        "actions": [{ 
-            "title": "Book Appointment",
-            "action": "step",
-            "options": {"step": "book", "flow": "main"}
-        }]
-      },
-      ...
-      {
-    	  "id": "book"
-        ...
+```json
+{
+  "flows": [{
+    "id": "main",
+  	"steps": [{
+  		"id": "hello",
+  		"displayName": "Say Hello",
+  		"type": "actions",
+  		"text": "Hi {{$firstName}}, how can I help?",
+  		"actions": [{ 
+  			"title": "Book Appointment",
+  			"action": "step",
+  			"options": {"step": "book", "flow": "main"}
+  		}]
+  	},
+  	...
+  	{
+  		"id": "book"
+  		...
   	}]
-    }]
-  }
-
-  ```
-
-  ​
+  }]
+}
+```
 
 - *flow* - runs specific flow. After flow finishes to execute the current flow continues.
 
-  ```json
-  {
-    "flows": [{
-    	"id": "main",
-      "steps": [{
-        "id": "hello",
-        "displayName": "Say Hello",
-        "type": "actions",
-        "text": "Hi {{$firstName}}, how can I help?",
-        "actions": [{ 
-            "title": "Book Appointment",
-            "action": "flow",
-            "options": {"flow": "clientDetails"}
-        }]
-      }]
-    }, {
-      "id": "clientDetails",
-      "steps": [{
-        "id": "phone",
-        "type": "input"
-        ...
-  	}] 
-    }]
-  }
-  ```
 
-  ​
+```json
+{
+  "flows": [{
+    "id": "main",
+    "steps": [{
+      "id": "hello",
+      "displayName": "Say Hello",
+      "type": "actions",
+      "text": "Hi {{$firstName}}, how can I help?",
+      "actions": [{ 
+        "title": "Book Appointment",
+        "action": "flow",
+        "options": {"flow": "clientDetails"}
+      }]
+    }]
+  }, {
+    "id": "clientDetails",
+    "steps": [{
+      "id": "phone",
+      "type": "input"
+      ...
+    }]
+  }]
+}
+```
+
+
+
 
 ### Cards Step
 
