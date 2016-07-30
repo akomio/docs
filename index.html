@@ -80,6 +80,16 @@
             
                 <li class="third-level"><a href="#flows-steps">Flows &amp; Steps</a></li>
             
+        
+            <li class="second-level"><a href="#steps">Steps</a></li>
+            
+                <li class="third-level"><a href="#context-parameters">Context &amp; Parameters</a></li>
+            
+                <li class="third-level"><a href="#conditions">Conditions</a></li>
+            
+        
+            <li class="second-level"><a href="#step-types">Step Types</a></li>
+            
                 <li class="third-level"><a href="#text-step">Text Step</a></li>
             
                 <li class="third-level"><a href="#actions-step">Actions Step</a></li>
@@ -121,15 +131,197 @@
 <p>Akomio uses concepts of flows and step to describe your bot behavior:</p>
 <p><strong>Flow</strong>  describes a bot conversation that is build around specific topic. For example collect user personal details, make a booking or perform a search. You can create as many flows for your bot. The first defined flow is considered to be an entry point flow and is executed when user starts new conversation with your bot. Flow consists of one or more steps.</p>
 <p><strong>Step</strong> is a building block of your bot. It describes specific user interaction with your bot like display text, buttons, ask for a number, date etc. There are multiple possible types of steps that are described below.</p>
+<h2 id="steps">Steps</h2>
+<p>Akomio flow step definition varies depending on step type, but all steps have the following properties defined:</p>
+<ul>
+<li><em>id</em> - step unique id. Must be unique across the flow step is defined in.</li>
+<li><em>displayName</em> - friendly step name to be displayed in Akomio system</li>
+<li><em>type</em> - step type. Can have one of the following values:</li>
+<li><em>text</em> - bot will just display specified text to a user.</li>
+<li><em>actions</em> - bot will display action buttons to users.</li>
+<li><em>cards</em> - display image cards (with actions) to users.</li>
+<li><em>input</em> - ask user to enter some information like name, birthday, number of guests.</li>
+<li><em>remote</em> - akomio will call the specified URL to get step configuration and then execute returned configuration. Can be used for specific business logic that cannot be covered by other step types</li>
+<li><em>condition</em> - boolean expression that defines whether step can be executed or not. </li>
+</ul>
+<h3 id="context-parameters">Context &amp; Parameters</h3>
+<p>During flow execution akomio tracks conversation and put any user input in current user conversation context. You can access these parameters at any point using <em>{{PARAM_NAME}}</em> syntax. For example, if you want to greet user and make the message a bit more friendly, you can insert user's name:</p>
+<pre><code class="json">{
+  &quot;id&quot;: &quot;hello&quot;,
+  &quot;displayName&quot;: &quot;Say Hello&quot;,
+  &quot;type&quot;: &quot;text&quot;,
+  &quot;text&quot;: &quot;Hi {{$firstName}}, how can I help?&quot;
+}
+</code></pre>
+
+<p>Akomio presets the following parameters for any conversation:</p>
+<ul>
+<li><em>$firstName</em> - user's first name based on his/her profile.</li>
+<li><em>$lastName</em> - user's last name based on his/her profile.</li>
+<li><em>$message.text</em> - current user's message</li>
+</ul>
+<h3 id="conditions">Conditions</h3>
+<p>For every step you can specify a condition when the step can be executed. If the condition is not defined then step is always executed.</p>
+<p><em>Condition</em> is a boolean expression based on current parameters. For example, if you already know user's email you can skip the step asking for email:</p>
+<pre><code class="json">{
+  &quot;id&quot;: &quot;inputEmail&quot;,
+  &quot;displayName&quot;: &quot;Ask for email&quot;,
+  &quot;type&quot;: &quot;input&quot;,
+  &quot;input_type&quot;: &quot;email&quot;,
+  &quot;parameter&quot;: &quot;email&quot;,
+  &quot;text&quot;: &quot;What is your email address?&quot;,
+  &quot;condition&quot;: &quot;email == ''&quot;  
+}
+</code></pre>
+
+<h2 id="step-types">Step Types</h2>
+<p>This section describes all possible step types in details.</p>
 <h3 id="text-step">Text Step</h3>
+<p>Text step is the simplest step possible. All it does is sends a message to user with text specified. You can specify text via <em>text</em> step property.</p>
+<p><em>Hello text step:</em></p>
+<pre><code class="json">{
+  &quot;id&quot;: &quot;hello&quot;,
+  &quot;displayName&quot;: &quot;Say Hello&quot;,
+  &quot;type&quot;: &quot;text&quot;,
+  &quot;text&quot;: &quot;Hi {{$firstName}}, how can I help?&quot;
+}
+</code></pre>
+
 <h3 id="actions-step">Actions Step</h3>
+<p>Use actions step to present action buttons to users.</p>
+<p>Actions are defined using <em>actions</em> step property and each action has the following definition:</p>
+<ul>
+<li><em>title</em> - action's title</li>
+<li><em>action</em> - action to execute when user press the button. See below for possible actions documentation.</li>
+<li><em>options</em> - action options</li>
+</ul>
+<h4 id="action-types">Action Types</h4>
+<p>You can define the following action descriptions for your buttons:</p>
+<ul>
+<li><em>next</em> - executes next step.</li>
+</ul>
+<p><code>json
+  {
+    "id": "hello",
+    "displayName": "Say Hello",
+    "type": "actions",
+    "text": "Hi {{$firstName}}, how can I help?",
+    "actions": [
+      { "title": "Book Appointment", "action": "next" }
+    ]
+  }</code></p>
+<p>​</p>
+<ul>
+<li><em>step</em> - executes specific step in a flow. Step and flow are specified via <em>options</em> <em>parameter</em></li>
+</ul>
+<p>```json
+  {
+    "flows": [{
+        "id": "main",
+      "steps": [{
+        "id": "hello",
+        "displayName": "Say Hello",
+        "type": "actions",
+        "text": "Hi {{$firstName}}, how can I help?",
+        "actions": [{ 
+            "title": "Book Appointment",
+            "action": "step",
+            "options": {"step": "book", "flow": "main"}
+        }]
+      },
+      ...
+      {
+          "id": "book"
+        ...
+    }]
+    }]
+  }</p>
+<p>```</p>
+<p>​</p>
+<ul>
+<li><em>flow</em> - runs specific flow. After flow finishes to execute the current flow continues.</li>
+</ul>
+<p><code>json
+  {
+    "flows": [{
+        "id": "main",
+      "steps": [{
+        "id": "hello",
+        "displayName": "Say Hello",
+        "type": "actions",
+        "text": "Hi {{$firstName}}, how can I help?",
+        "actions": [{ 
+            "title": "Book Appointment",
+            "action": "flow",
+            "options": {"flow": "clientDetails"}
+        }]
+      }]
+    }, {
+      "id": "clientDetails",
+      "steps": [{
+        "id": "phone",
+        "type": "input"
+        ...
+    }] 
+    }]
+  }</code></p>
+<p>​</p>
 <h3 id="cards-step">Cards Step</h3>
+<p>Displays image content cards to users. Requies <em>cards</em> step property to define card. Card definition includes the following properties:</p>
+<ul>
+<li><em>image_url</em> - web url to the image to be displayed for the card</li>
+<li><em>title</em> - card title</li>
+<li><em>subtitle</em> - card subtitle</li>
+<li><em>actions</em> - card actions. (See Actions section). Max 3 actions per card is allowed. </li>
+</ul>
+<pre><code class="json">{
+  &quot;id&quot;: &quot;hello&quot;,
+  &quot;displayName&quot;: &quot;Say Hello&quot;,
+  &quot;type&quot;: &quot;cards&quot;,
+  &quot;text&quot;: &quot;Hi {{$firstName}}, how can I help?&quot;,
+  &quot;cards&quot;: [
+    {
+      &quot;image_url&quot;: &quot;https://images.awesomedomain.com/111.jpg&quot;,
+      &quot;title&quot;: &quot;Awesome Card&quot;,
+      &quot;subtitle&quot;: &quot;This is an awesome card&quot;,
+      &quot;actions&quot;: [
+        { &quot;title&quot;: &quot;Click Me&quot;, &quot;action&quot;: &quot;next&quot;}
+      ]
+    }
+  ]
+}
+</code></pre>
+
 <h3 id="input-step">Input Step</h3>
-<h4 id="text">Text</h4>
-<h4 id="date">Date</h4>
-<h4 id="time">Time</h4>
-<h4 id="number">Number</h4>
-<h3 id="remote-step">Remote Step</h3></div>
+<p>Input step allows you to get data from users. After user enters valid value it will be written as a value for a parameter specified in <em>parameter</em> step property. Input step required the following properties:</p>
+<ul>
+<li><em>parameter</em> - parameter name the input will write the value to</li>
+<li>input_type* - type of the input. Can be on of the following:</li>
+<li><em>text</em> - text input. Any text user writes will be written as a parameter value.</li>
+<li><em>email</em> - email input. Entered value must be a valid email address</li>
+<li><em>date</em> - entered value must be a valid date. There is no restrictions on a date format as Akomio understands values like "next Friday", "July 13", "monday" etc.  </li>
+<li><em>time</em> - entered value must be a valid time</li>
+<li><em>number</em> - entered value must be a valid number</li>
+</ul>
+<pre><code class="json">{
+  &quot;id&quot;: &quot;hello&quot;,
+  &quot;displayName&quot;: &quot;Say Hello&quot;,
+  &quot;type&quot;: &quot;input&quot;,
+  &quot;input_type&quot;: &quot;email&quot;,
+  &quot;parameter&quot;: &quot;email&quot;,
+  &quot;text&quot;: &quot;What is your email address?&quot;
+}
+</code></pre>
+
+<h3 id="remote-step">Remote Step</h3>
+<p>Remote step makes a POST request to an url specified in <em>url</em>  step property, passing all current parameters in a request body, and expects step configuration to be returned as a response. The returned configuration is executed.</p>
+<pre><code class="json">{
+  &quot;id&quot;: &quot;showResults&quot;,
+  &quot;displayName&quot;: &quot;Present Search Results&quot;,
+  &quot;type&quot;: &quot;remote&quot;,
+  &quot;url&quot;: &quot;https://api.myawesomesystem.com/search&quot;
+}
+</code></pre></div>
         
     </div>
 
@@ -182,5 +374,5 @@
 
 <!--
 MkDocs version : 0.15.3
-Build Date UTC : 2016-07-30 13:39:24.915000
+Build Date UTC : 2016-07-30 16:08:49.776000
 -->
