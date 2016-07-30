@@ -1,17 +1,57 @@
-# Welcome to MkDocs
+# Akomio Documentation
 
-For full documentation visit [mkdocs.org](http://mkdocs.org).
+Platform documentation for Akomio Bots Engine
 
-## Commands
+---
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs help` - Print this help message.
+## What is Akomio
 
-## Project layout
+**Akomio** is a bot building platform oriented to developers. It allows to create your bots conversation flows using declarative json format.
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## Basics
+
+In Akomio bot is represented by a json configuration that describes all aspects of bot behavior.
+
+Below is a sample echo bot configuration created with Akomio
+
+```json
+{
+  "flows": [{
+ 	"id": "main",
+    "steps": [{
+  		"id": "echo",
+      	"displayName": "Echo Message",
+      	"type": "text",
+       	"text": "You wrote: {{$message.text}}"
+	}]
+  }]
+}
+```
+
+
+
+### Flows & Steps
+
+Akomio uses concepts of flows and step to describe your bot behavior:
+
+**Flow**  describes a bot conversation that is build around specific topic. For example collect user personal details, make a booking or perform a search. You can create as many flows for your bot. The first defined flow is considered to be an entry point flow and is executed when user starts new conversation with your bot. Flow consists of one or more steps.
+
+**Step** is a building block of your bot. It describes specific user interaction with your bot like display text, buttons, ask for a number, date etc. There are multiple possible types of steps that are described below.
+
+### Text Step
+
+### Actions Step
+
+### Cards Step
+
+### Input Step
+
+#### Text
+
+#### Date
+
+#### Time
+
+#### Number
+
+### Remote Step
